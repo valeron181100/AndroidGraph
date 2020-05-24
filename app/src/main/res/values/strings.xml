@@ -7,4 +7,6 @@
     <string name="right_border_str">Правая граница</string>
     <string name="foo_str">Функция</string>
     <string name="eps_str">Точность</string>
+    <string name="one_exp_str">Одно</string>
+    <string name="comp_exp_str">Система</string>
 </resources>

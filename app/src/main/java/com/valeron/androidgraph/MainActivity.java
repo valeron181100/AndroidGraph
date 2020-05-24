@@ -10,9 +10,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.tabs.TabLayout;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -22,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView mBottomBarIV;
     LinearLayout mBottomSheetLL;
     BottomSheetBehavior<LinearLayout> mBottomSheetBehavior;
-    FrameLayout mBottomFrameLayout;
+    RelativeLayout mBottomFrameLayout;
+    TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mBottomBarIV = findViewById(R.id.bottomBarIV);
         mBottomSheetLL = findViewById(R.id.bottom_sheet);
         mBottomFrameLayout = findViewById(R.id.bottomFrame);
+        mTabLayout = findViewById(R.id.bottomTabLayout);
         mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetLL);
 
         mBottomFrameLayout.setOnClickListener(new View.OnClickListener() {

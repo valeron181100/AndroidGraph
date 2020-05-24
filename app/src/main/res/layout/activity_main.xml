@@ -22,19 +22,39 @@
         app:behavior_peekHeight="40dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/bottomFrame"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/LightSteelBlue"
             android:gravity="center">
+            <com.google.android.material.tabs.TabLayout android:id="@+id/bottomTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="50dp">
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/oneExpTabItem"
+                    android:text="@string/one_exp_str"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"/>
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/compExpTabItem"
+                    android:text="@string/comp_exp_str"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"/>
+
+
+            </com.google.android.material.tabs.TabLayout>
             <ImageView
                 android:id="@+id/bottomBarIV"
-                android:layout_width="match_parent"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
+                android:layout_toEndOf="@id/bottomTabLayout"
+                android:layout_marginStart="-40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 app:srcCompat="@drawable/ic_up_arrow"/>
-        </FrameLayout>
+        </RelativeLayout>
 
 
         <FrameLayout

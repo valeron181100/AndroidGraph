@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior<LinearLayout> mBottomSheetBehavior;
     RelativeLayout mBottomFrameLayout;
     TabLayout mTabLayout;
+    ViewPager mControlPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mBottomSheetLL = findViewById(R.id.bottom_sheet);
         mBottomFrameLayout = findViewById(R.id.bottomFrame);
         mTabLayout = findViewById(R.id.bottomTabLayout);
+        mControlPager = findViewById(R.id.controlViewPager);
         mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetLL);
 
         mBottomFrameLayout.setOnClickListener(new View.OnClickListener() {
@@ -63,15 +68,48 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment graphFragment = fm.findFragmentById(R.id.graphFragment);
-        Fragment controlFragment = fm.findFragmentById(R.id.controlFragment);
         if(graphFragment == null){
             graphFragment = new GraphFragment();
         }
-        if(controlFragment == null){
-            controlFragment = new ControlPanelFragment();
-        }
-        fm.beginTransaction().replace(R.id.graphFragment, graphFragment)
-                .replace(R.id.controlFragment, controlFragment).commit();
-
+        fm.beginTransaction().replace(R.id.graphFragment, graphFragment).commit();
+        mControlPager.setAdapter(new SrollControlFragmentsPagerAdapter(this, fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+        mControlPager.setCurrentItem(0);
+        mTabLayout.setupWithViewPager(mControlPager);
     }
+
+
+    private class SrollControlFragmentsPagerAdapter extends FragmentStatePagerAdapter {
+        private Context mContext;
+
+        public SrollControlFragmentsPagerAdapter(Context context, @NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+            mContext = context;
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if(position == 0){
+                return new ControlPanelFragment();
+            }else{
+                return new ControlCompPanelFragment();
+            }
+
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if(position == 0){
+                return mContext.getResources().getString(R.string.one_exp_str);
+            }else{
+                return mContext.getResources().getString(R.string.comp_exp_str);
+            }
+        }
+    }
+
 }

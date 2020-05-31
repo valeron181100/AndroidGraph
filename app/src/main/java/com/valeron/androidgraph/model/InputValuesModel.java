@@ -1,5 +1,7 @@
 package com.valeron.androidgraph.model;
 
+import com.valeron.androidgraph.logic.SolveMethod;
+
 import org.mariuszgromada.math.mxparser.Function;
 
 import java.util.ArrayList;
@@ -11,7 +13,16 @@ public class InputValuesModel {
     private Function mFunction;
     private double mEps;
     private static InputValuesModel instance;
+    private SolveMethod mSolveMethod = SolveMethod.Chords;
     private ArrayList<InputValuesChangeListener> mListeners;
+
+    public SolveMethod getSolveMethod() {
+        return mSolveMethod;
+    }
+
+    public void setSolveMethod(SolveMethod solveMethod) {
+        mSolveMethod = solveMethod;
+    }
 
     private InputValuesModel(){
         mListeners = new ArrayList<>();
@@ -40,7 +51,11 @@ public class InputValuesModel {
     }
 
     public void setRightBorder(double rightBorder) {
-        mRightBorder = rightBorder;
+        if(getLeftBorder() > rightBorder){
+            mRightBorder = getLeftBorder();
+            setLeftBorder(rightBorder);
+        }else
+            mRightBorder = rightBorder;
     }
 
     public Function getFunction() {

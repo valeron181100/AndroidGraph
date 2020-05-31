@@ -9,4 +9,5 @@
     <string name="eps_str">Точность</string>
     <string name="one_exp_str">Одно</string>
     <string name="comp_exp_str">Система</string>
+    <string name="f_x">f(x) =</string>
 </resources>

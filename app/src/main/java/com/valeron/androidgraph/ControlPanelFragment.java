@@ -47,7 +47,7 @@ public class ControlPanelFragment extends Fragment {
         mCalcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fooText = mFunctionET.getText().toString();
+                String fooText = "f(x)=" + mFunctionET.getText().toString();
                 String epsText = mEpsET.getText().toString();
                 String lbText = mLeftBorderET.getText().toString();
                 String rbText = mRightBorderET.getText().toString();

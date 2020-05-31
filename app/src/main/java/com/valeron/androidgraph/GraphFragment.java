@@ -51,7 +51,7 @@ public class GraphFragment extends Fragment {
                 mGraph.getViewport().setMinX(mValuesModel.getLeftBorder() - AXIS_PADDING);
                 mGraph.getViewport().setMaxX(mValuesModel.getRightBorder() + AXIS_PADDING);
                 ArrayList<DataPoint> points = new ArrayList<>();
-                for (double i = mValuesModel.getLeftBorder() - AXIS_PADDING; i < mValuesModel.getRightBorder() + AXIS_PADDING; i+= 0.1) {
+                for (double i = mValuesModel.getLeftBorder() - AXIS_PADDING; i < mValuesModel.getRightBorder() + AXIS_PADDING; i+= 0.001) {
                     points.add(
                             new DataPoint(i, mValuesModel.getFunction().calculate(i))
                     );
@@ -60,12 +60,20 @@ public class GraphFragment extends Fragment {
                 mGraph.getSeries().clear();
 
                 double x0 = new GraphSolver(mValuesModel.getFunction(), mValuesModel.getLeftBorder(), mValuesModel.getRightBorder(), mValuesModel.getEps())
-                .solve(SolveMethod.Chords);
+                .solve(mValuesModel.getSolveMethod());
 
                 LineGraphSeries<DataPoint> xSeries = new LineGraphSeries<>(new DataPoint[]{
                         new DataPoint(x0, mValuesModel.getFunction().calculate(x0))
                 });
-                xSeries.setColor(Color.parseColor("red"));
+
+                if(x0 < mValuesModel.getLeftBorder() || x0 > mValuesModel.getRightBorder()){
+                    Toast.makeText(GraphFragment.this.getContext(), "Найденный корень не входит в заданный интервал.", Toast.LENGTH_SHORT)
+                            .show();
+                    xSeries.setColor(Color.parseColor("red"));
+                }else{
+                    xSeries.setColor(Color.parseColor("green"));
+                }
+
                 xSeries.setDrawDataPoints(true);
                 xSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
                     @Override

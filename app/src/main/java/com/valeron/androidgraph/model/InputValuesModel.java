@@ -11,6 +11,7 @@ public class InputValuesModel {
     private double mLeftBorder;
     private double mRightBorder;
     private Function mFunction;
+    private Function mFunction1;
     private double mEps;
     private static InputValuesModel instance;
     private SolveMethod mSolveMethod = SolveMethod.Chords;
@@ -56,6 +57,14 @@ public class InputValuesModel {
             setLeftBorder(rightBorder);
         }else
             mRightBorder = rightBorder;
+    }
+
+    public Function getFunction1() {
+        return mFunction1;
+    }
+
+    public void setFunction1(Function function1) {
+        mFunction1 = function1;
     }
 
     public Function getFunction() {

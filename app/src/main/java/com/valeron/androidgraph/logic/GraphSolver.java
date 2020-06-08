@@ -6,22 +6,26 @@ import org.mariuszgromada.math.mxparser.Function;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GraphSolver {
 
+
     private Function foo;
+    private Function foo1;
     private double a;
     private double b;
     private double eps;
     public static final int MAX_ITERS = 1000;
 
-    public GraphSolver(Function foo, double a, double b, double eps) throws RuntimeException {
+    public GraphSolver(Function foo, double a, double b, double eps) throws Exception {
         if(!foo.checkSyntax()){
-            throw new RuntimeException("Ошибка: неверный синтакс функции.");
+            throw new Exception("Ошибка: неверный синтакс функции.");
         }
         this.foo = foo;
         this.a = a;
@@ -29,15 +33,37 @@ public class GraphSolver {
         this.eps = eps;
     }
 
-    public double solve(SolveMethod method){
+    public GraphSolver(Function foo, Function foo1, double a, double b, double eps) throws Exception {
+        if(!foo.checkSyntax()){
+            throw new Exception("Ошибка: неверный синтакс функции.");
+        }
+        if(!foo1.checkSyntax()){
+            throw new Exception("Ошибка: неверный синтакс функции.");
+        }
+        this.foo = foo;
+        this.foo1 = foo1;
+        this.a = a;
+        this.b = b;
+        this.eps = eps;
+    }
+
+    public Map<String, Double> solve(SolveMethod method) throws Exception {
+        HashMap<String, Double> resMap = new HashMap<>();
         switch (method){
-            case Chords: return doMethodChord(foo, a, b, eps);
-            case Touch: return doMethodTouch(foo, a, b, eps);
-            default: return 0;
+            case Chords:
+                resMap.put("x", doMethodChord(foo, a, b, eps));
+                return resMap;
+            case Touch:
+                resMap.put("x", doMethodTouch(foo, a, b, eps));
+                return resMap;
+            case Newton:
+                return doMethodNewton(Arrays.asList(foo, foo1), a, b , eps);
+
+            default: return null;
         }
     }
 
-    private double doMethodChord (Function f, double a, double b, double eps) {
+    private double doMethodChord (Function f, double a, double b, double eps) throws Exception {
         if(a > b) {
             double temp = a;
             a = b;
@@ -54,7 +80,12 @@ public class GraphSolver {
         while(Math.abs(xCurr - xPrev) > eps){
             xDoublePrev = xPrev;
             xPrev = xCurr;
-            xCurr -= f.calculate(xPrev) * (xPrev - xDoublePrev)/(f.calculate(xPrev) - f.calculate(xDoublePrev));
+            double numerator = f.calculate(xPrev) * (xPrev - xDoublePrev);
+            double denominator =(f.calculate(xPrev) - f.calculate(xDoublePrev));
+            if(denominator == 0 || Double.isNaN(denominator)){
+                throw new Exception("Ошибка: метод не сходится.");
+            }
+            xCurr -= numerator/denominator;
         }
         return xCurr;
     }
@@ -84,13 +115,13 @@ public class GraphSolver {
         return xCurr;
     }
 
-    public static Map<String, Double> doMethodNewton(ArrayList<Function> functions, Map<String, Double> X0, double eps){
+    public static Map<String, Double> doMethodNewton(List<Function> functions, double x01, double x02, double eps) throws Exception {
         int k = 0;
         Function f1 = functions.get(0);
         Function f2 = functions.get(1);
 
-        double a = X0.get("x");
-        double b = X0.get("y");
+        double a = x01;
+        double b = x02;
         double x = a;
         double y = b;
 
@@ -105,6 +136,9 @@ public class GraphSolver {
             double df2dy = getDerivative(f2, a, b,  1);
 
             double J = df1dx * df2dy - df1dy * df2dx;
+            if(J == 0){
+                throw new Exception("Ошибка: Якобиан равен нулю");
+            }
             double A = f1.calculate(a, b)/J;
             double B = f2.calculate(a, b)/J;
 
@@ -124,7 +158,7 @@ public class GraphSolver {
 
 
     /**
-     * if derNum == 0 then df/dx else der == 1 df/dy
+     * if derNum == 0 then df/dx else if der == 1 df/dy
      * @param f
      * @param x
      * @param y

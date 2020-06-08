@@ -53,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+                if(e instanceof RuntimeException){
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         mBottomBarIV = findViewById(R.id.bottomBarIV);
         mBottomSheetLL = findViewById(R.id.bottom_sheet);
         mBottomFrameLayout = findViewById(R.id.bottomFrame);
@@ -130,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     mSolveWaysNumber = 1;
                     isWaysNumChanged.setVal(true);
+                    mValuesModel.setSolveMethod(SolveMethod.Newton);
                 }
             }
 

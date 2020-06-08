@@ -10,4 +10,8 @@
     <string name="one_exp_str">Одно</string>
     <string name="comp_exp_str">Система</string>
     <string name="f_x">f(x) =</string>
+    <string name="foos_str">Функции</string>
+    <string name="f_x_y">f(x,y)</string>
+    <string name="init_approx_x">Начальное приближение x</string>
+    <string name="init_approx_y">Начальное приближение y</string>
 </resources>
